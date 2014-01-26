@@ -18,35 +18,27 @@ write(Key, Element, Db) ->
 
 read (_Key, []) ->
   {error, instance};
-read(Key, [H|T]) ->
-  HeadKey = element(1, H),
-  HeadValue = element(2, H),
-  case HeadKey of
-    Key -> {ok, HeadValue};
-    _Other -> read(Key, T)
-  end.
+read (Key, [{Key,Value}|_T]) ->
+  {ok, Value};
+read (Key, [{_,_}|T])->
+  read(Key, T).
 
 match(Element, Db) ->
-  collect(Element, Db, []).
+  collect_matching(Element, Db, []).
 
-collect(_Element, [], _Aggregator) ->
+collect_matching(_Element, [], _Aggregator) ->
   [];
-collect(Element, [H|T], Aggregator) ->
-  HeadKey = element(1, H),
-  HeadValue = element(2, H),
-  case HeadValue of
-    Element -> [HeadKey|collect(Element, T, Aggregator)];
-    _Other -> collect(Element, T, Aggregator)
-  end.
+collect_matching(Element, [{HeadKey,Element}|T], Aggregator) ->
+  [HeadKey|collect_matching(Element, T, Aggregator)];
+collect_matching(Element, [_|T], Aggregator) ->
+  collect_matching(Element, T, Aggregator).
 
 delete(Key, Db) ->
-  collect_useful(Key, Db, []).
+  collect_saved(Key, Db, []).
 
-collect_useful(_Key, [], _Saved) ->
+collect_saved(_Key, [], _Saved) ->
   [];
-collect_useful(Key, [H|T], Saved) ->
-  ElementHead = element(1, H),
-  case ElementHead of
-    Key -> collect_useful(Key, T, Saved);
-    _Other -> [H|collect_useful(Key, T, Saved)]
-  end.
+collect_saved(Key, [{Key,_}|T], Saved) ->
+  collect_saved(Key, T, Saved);
+collect_saved(Key, [{H,_}|T], Saved) ->
+  [H|collect_saved(Key, T, Saved)].
