@@ -11,23 +11,23 @@
 filter([], _) ->
   [];
 filter(Array, Border) ->
-  reverse(filter_out(Array, Border, [])).
+  reverse(filter(Array, Border, [])).
 
 
-filter_out([], _, Saved) ->
+filter([], _, Saved) ->
   Saved;
-filter_out([H|T], Border, Saved) when H=<Border ->
-  filter_out(T, Border, [H|Saved]);
-filter_out([_|T], Border, Saved) ->
-  filter_out(T, Border, Saved).
+filter([H|T], Border, Saved) when H=<Border ->
+  filter(T, Border, [H|Saved]);
+filter([_|T], Border, Saved) ->
+  filter(T, Border, Saved).
 
 
 reverse([]) ->
   [];
 reverse (Array) ->
-  do_reverse(Array, []).
+  reverse(Array, []).
 
-do_reverse([], Acc) ->
+reverse([], Acc) ->
   Acc;
-do_reverse([H|T], Acc) ->
-  do_reverse(T, [H|Acc]).
+reverse([H|T], Acc) ->
+  reverse(T, [H|Acc]).
