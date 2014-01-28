@@ -1,12 +1,23 @@
 %%%-------------------------------------------------------------------
-%%% @author anatol
 %%% @doc
-%%%
+%%% Excercise 3-5: p.84. Manipulating Lists
 %%% @end
-%%% Created : 26. Jan 2014 12:24 PM
 %%%-------------------------------------------------------------------
 -module(ex35).
--author("anatol").
+-export([filter/2]).
+-author("Anatol Lutski <alutski@gmail.com>").
 
-%% API
--export([]).
+
+filter([], _) ->
+  [];
+filter(Array, Border) ->
+  filter_out(Array, Border, []).
+
+
+filter_out([], _, Saved) ->
+  Saved;
+filter_out([H|T], Border, Saved) when H=<Border ->
+  filter_out(T, Border, [H|Saved]);
+filter_out([_|T], Border, Saved) ->
+  filter_out(T, Border, Saved).
+
