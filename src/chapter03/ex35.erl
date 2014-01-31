@@ -35,12 +35,12 @@ reverse([H|T], Acc) ->
 concatenate([]) ->
   [];
 concatenate(List) ->
-  concatenate (List, []).
+  reverse(concatenate (List, [])).
 
-concatenate ([], [])  ->
-  [];
+concatenate ([], Acc)  ->
+  Acc;
 concatenate ([H|T], Acc) when is_list(H) ->
-  reverse(concatenate_list(H, Acc)) ++ concatenate(T, Acc);
+  concatenate(T, concatenate_list(H, Acc));
 concatenate ([H|T], Acc) ->
   concatenate(T, [H|Acc]).
 
