@@ -4,15 +4,14 @@
 %%% @end
 %%%-------------------------------------------------------------------
 -module(ex35).
--export([filter/2, reverse/1]).
+-export([filter/2, reverse/1, concatenate/1]).
 -author("Anatol Lutski <alutski@gmail.com>").
 
 
 filter([], _) ->
   [];
-filter(Array, Border) ->
-  reverse(filter(Array, Border, [])).
-
+filter(List, Border) ->
+  reverse(filter(List, Border, [])).
 
 filter([], _, Saved) ->
   Saved;
@@ -24,10 +23,38 @@ filter([_|T], Border, Saved) ->
 
 reverse([]) ->
   [];
-reverse (Array) ->
-  reverse(Array, []).
+reverse (List) ->
+  reverse(List, []).
 
 reverse([], Acc) ->
   Acc;
 reverse([H|T], Acc) ->
   reverse(T, [H|Acc]).
+
+
+concatenate([]) ->
+  [];
+concatenate(List) ->
+  concatenate (List, []).
+
+concatenate ([], [])  ->
+  [];
+concatenate ([H|T], Acc) when is_list(H) ->
+  reverse(concatenate_list(H, Acc)) ++ concatenate(T, Acc);
+concatenate ([H|T], Acc) ->
+  concatenate(T, [H|Acc]).
+
+concatenate_list([], Acc) ->
+  Acc;
+concatenate_list ([H|T], Acc)->
+  concatenate_list(T, [H|Acc]).
+
+
+
+
+
+
+
+
+
+
