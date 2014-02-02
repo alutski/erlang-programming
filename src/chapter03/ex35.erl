@@ -4,7 +4,7 @@
 %%% @end
 %%%-------------------------------------------------------------------
 -module(ex35).
--export([filter/2, reverse/1, concatenate/1]).
+-export([filter/2, reverse/1, concatenate/1, flatten/1]).
 -author("Anatol Lutski <alutski@gmail.com>").
 
 
@@ -32,25 +32,21 @@ reverse([H|T], Acc) ->
   reverse(T, [H|Acc]).
 
 
-concatenate([]) ->
-  [];
 concatenate(List) ->
-  reverse(concatenate (List, [])).
+  flatten(List).
 
-concatenate ([], Acc)  ->
+
+flatten([]) ->
+  [];
+flatten(List) ->
+  reverse(flatten(List, [])).
+
+flatten([], Acc) ->
   Acc;
-concatenate ([H|T], Acc) when is_list(H) ->
-  concatenate(T, concatenate_list(H, Acc));
-concatenate ([H|T], Acc) ->
-  concatenate(T, [H|Acc]).
-
-concatenate_list([], Acc) ->
-  Acc;
-concatenate_list ([H|T], Acc)->
-  concatenate_list(T, [H|Acc]).
-
-
-
+flatten([H|T], Acc) when is_list(H) ->
+  flatten(T, flatten(H, Acc));
+flatten([H|T], Acc) ->
+  flatten(T, [H|Acc]).
 
 
 
